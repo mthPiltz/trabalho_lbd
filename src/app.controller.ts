@@ -1,16 +1,21 @@
 import { Controller, Get } from '@nestjs/common';
 import { AppService } from './app.service';
-import { Teste } from './teste';
+import { ConfigService } from '@nestjs/config';
 
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService, private readonly teste: Teste) {}
+  constructor(private readonly appService: AppService, private readonly envConfig: ConfigService) {}
 
   @Get()
   getHello(): string {
+    const client_id = this.envConfig.get('client_id')
     return `
     <html>
-      <body><div><button id="btn">logar</button></div></body>
+      <body>
+        <div>
+          <a href='https://accounts.spotify.com/authorize?response_type=code&client_id=${client_id}&scope=user-read-private user-read-email user-top-read&redirect_uri=http://localhost:3030/callback'>Logar</a>
+        </div>
+      </body>
       <script>
         const btn = document.getElementById('btn');
         btn.addEventListener('click' ,async (e) => {
@@ -23,8 +28,8 @@ export class AppController {
     `;
   }
 
-  @Get('teste')
+  @Get('callback')
   getTeste() {
-    return { message:'sucesso!'}
+    const url = 'https://api.spotify.com/v1/me/top/artists'
   }
 }
