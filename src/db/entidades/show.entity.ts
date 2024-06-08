@@ -1,7 +1,9 @@
-import { Column, Entity, JoinColumn, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { EntidadeBase } from "../entidade-base";
 import { ShowImageEntity } from "./show-image.entity";
 import { EpisodeEntity } from "./episode.entity";
+import { CopyrightEntity } from "./copyright.entity";
+import { MarketEntity } from "./market.entity";
 
 @Entity({ name: 'show' })
 export class ShowEntity extends EntidadeBase<ShowEntity> {
@@ -54,4 +56,10 @@ export class ShowEntity extends EntidadeBase<ShowEntity> {
 
   @OneToMany(() => EpisodeEntity, episode => episode.show, { cascade: false, createForeignKeyConstraints: true })
   episodes: EpisodeEntity[]
+
+  @ManyToMany(() => CopyrightEntity, copyright => copyright.shows, {createForeignKeyConstraints: true})
+  copyrights: CopyrightEntity[]
+
+  @ManyToMany(() => MarketEntity, market => market.shows, {createForeignKeyConstraints: true})
+  markets: MarketEntity[];
 }
