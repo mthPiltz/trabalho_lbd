@@ -1,7 +1,7 @@
 import { Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { EntidadeBase } from "../entidade-base";
 import { AlbumEntity } from "./album.entity";
-import { ArtistImageEntity } from "./artist-image.entity";
+import { ArtistImageEntity } from "../imagens/artist-image.entity";
 import { GenresEntity } from "./genres.entity";
 import { TrackEntity } from "./track.entity";
 

@@ -1,6 +1,6 @@
 import { Column, Entity, JoinColumn, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { EntidadeBase } from "../entidade-base";
-import { ChapterImageEntity } from "./chapter-image.entity";
+import { ChapterImageEntity } from "../imagens/chapter-image.entity";
 import { MarketEntity } from "./market.entity";
 import { AudiobookEntity } from "./audiobook.entity";
 

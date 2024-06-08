@@ -1,6 +1,6 @@
 import { Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
-import { BaseImageEntity } from "../base-image-entity";
-import { ShowEntity } from "./show.entity";
+import { BaseImageEntity } from "./base-image-entity";
+import { ShowEntity } from "../entidades/show.entity";
 
 @Entity({ name: 'show_image' })
 export class ShowImageEntity extends BaseImageEntity {

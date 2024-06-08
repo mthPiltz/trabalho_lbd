@@ -1,4 +1,4 @@
-import { EntidadeBase } from "./entidade-base";
+import { EntidadeBase } from "../entidade-base";
 import { Column } from "typeorm";
 
 export class BaseImageEntity extends EntidadeBase<BaseImageEntity> {

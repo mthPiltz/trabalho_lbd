@@ -1,5 +1,5 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
-import { CategoryEntity } from "./category.entity";
+import { CategoryEntity } from "../entidades/category.entity";
 import { EntidadeBase } from "../entidade-base";
 
 @Entity('category_image')

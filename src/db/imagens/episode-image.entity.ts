@@ -1,5 +1,5 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
-import { EpisodeEntity } from "./episode.entity";
+import { EpisodeEntity } from "../entidades/episode.entity";
 import { EntidadeBase } from "../entidade-base";
 
 @Entity({ name: 'episode_image' })

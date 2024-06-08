@@ -2,7 +2,7 @@ import { Column, Entity, ManyToMany, OneToMany, PrimaryGeneratedColumn } from "t
 import { EntidadeBase } from "../entidade-base";
 import { ChapterEntity } from "./chapter.entity";
 import { CopyrightEntity } from "./copyright.entity";
-import { AudiobookImageEntity } from "./audiobook-image.entity";
+import { AudiobookImageEntity } from "../imagens/audiobook-image.entity";
 import { MarketEntity } from "./market.entity";
 
 @Entity('audiobook')

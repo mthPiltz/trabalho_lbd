@@ -1,5 +1,5 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { EpisodeImageEntity } from "./episode-image.entity";
+import { EpisodeImageEntity } from "../imagens/episode-image.entity";
 import { EntidadeBase } from "../entidade-base";
 import { ShowEntity } from "./show.entity";
 

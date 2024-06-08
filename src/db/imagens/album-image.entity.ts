@@ -1,6 +1,6 @@
 import { Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
-import { BaseImageEntity } from "../base-image-entity";
-import { AlbumEntity } from "./album.entity";
+import { BaseImageEntity } from "./base-image-entity";
+import { AlbumEntity } from "../entidades/album.entity";
 
 @Entity('album_image')
 export class AlbumImageEntity extends BaseImageEntity {

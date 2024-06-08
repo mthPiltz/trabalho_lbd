@@ -1,7 +1,7 @@
 import { Column, Entity, JoinColumn, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { EntidadeBase } from "../entidade-base";
 import { CopyrightEntity } from "./copyright.entity";
-import { AlbumImageEntity } from "./album-image.entity";
+import { AlbumImageEntity } from "../imagens/album-image.entity";
 import { MarketEntity } from "./market.entity";
 import { GenresEntity } from "./genres.entity";
 import { ArtistEntity } from "./artist.entity";
