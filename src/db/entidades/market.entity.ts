@@ -12,7 +12,7 @@ export class MarketEntity extends EntidadeBase<MarketEntity> {
   @PrimaryGeneratedColumn({ name: "id", primaryKeyConstraintName: "pk_market" })
   id: number;
 
-  @Column({ name: "type", type: "varchar", length: 255 })
+  @Column({ name: "type", type: "varchar", length: 255, nullable: true })
   type: string;
 
   @ManyToMany(() => ShowEntity, show => show.markets, {createForeignKeyConstraints: true})

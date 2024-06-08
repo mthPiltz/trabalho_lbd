@@ -9,10 +9,10 @@ export class CopyrightEntity extends EntidadeBase<CopyrightEntity> {
   @PrimaryGeneratedColumn({ name: 'id', primaryKeyConstraintName: 'pk_copyright' })
   id: number;
 
-  @Column({ name: 'text', type: 'varchar', length: 255 })
+  @Column({ name: 'text', type: 'varchar', length: 255, nullable: true })
   text: string;
 
-  @Column({ name: 'type', type: 'varchar', length: 255 })
+  @Column({ name: 'type', type: 'varchar', length: 255, nullable: true })
   type: string;
 
   @ManyToMany(() => ShowEntity, show => show.copyrights, {createForeignKeyConstraints: true})

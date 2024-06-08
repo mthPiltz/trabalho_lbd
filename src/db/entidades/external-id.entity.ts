@@ -8,13 +8,13 @@ export class ExternalIdEntity extends EntidadeBase<ExternalIdEntity> {
   @PrimaryGeneratedColumn({ name: 'id', primaryKeyConstraintName: 'pk_external_id' })
   id: number;
 
-  @Column({ name: 'isrc', type: 'varchar', length: 255 })
+  @Column({ name: 'isrc', type: 'varchar', length: 255, nullable: true })
   isrc: string;
 
-  @Column({ name: 'ean', type: 'varchar', length: 255 })
+  @Column({ name: 'ean', type: 'varchar', length: 255, nullable: true })
   ean: string;
 
-  @Column({ name: 'upc', type: 'varchar', length: 255 })
+  @Column({ name: 'upc', type: 'varchar', length: 255, nullable: true })
   upc: string;
 
   @OneToMany(() => TrackEntity, track => track.external_id)

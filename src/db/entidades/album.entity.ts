@@ -8,40 +8,40 @@ import { ArtistEntity } from "./artist.entity";
 import { TrackEntity } from "./track.entity";
 import { ExternalIdEntity } from "./external-id.entity";
 
-@Entity('album')
+@Entity('album', )
 export class AlbumEntity extends EntidadeBase<AlbumEntity> {
 
   @PrimaryGeneratedColumn({ name: 'id', primaryKeyConstraintName: 'pk_album' })
   id: number;
 
-  @Column({ name: 'album_type', type: 'varchar', length: 50 })
+  @Column({ name: 'album_type', type: 'varchar', length: 50, nullable: true })
   album_type: string;
 
-  @Column({ name: 'total_tracks', type: 'int'})
+  @Column({ name: 'total_tracks', type: 'int', nullable: true})
   total_tracks: number;
 
-  @Column({ name: 'external_url_spotify', type: 'varchar', length: 255 })
+  @Column({ name: 'external_url_spotify', type: 'varchar', length: 255 , nullable: true})
   external_url_spotify: string;
 
-  @Column({name: 'href', type: 'varchar', length: 255})
+  @Column({name: 'href', type: 'varchar', length: 255, nullable: true})
   href: string;
 
-  @Column({ name: 'name', type: 'varchar', length: 255 })
+  @Column({ name: 'name', type: 'varchar', length: 255 , nullable: true})
   name: string;
 
-  @Column({ name: 'release_date', type: 'date' })
+  @Column({ name: 'release_date', type: 'date' , nullable: true})
   release_date: Date;
 
-  @Column({ name: 'release_date_precision', type: 'varchar', length: 15 })
+  @Column({ name: 'release_date_precision', type: 'varchar', length: 15 , nullable: true})
   release_date_precision: string;
 
-  @Column({ name: 'type', type: 'varchar', length: 15 })
+  @Column({ name: 'type', type: 'varchar', length: 15 , nullable: true})
   type: string;
 
-  @Column({ name: 'uri', type: 'varchar', length: 255 })
+  @Column({ name: 'uri', type: 'varchar', length: 255 , nullable: true})
   uri: string;
 
-  @Column({ name: 'label', type: 'varchar', length: 255 })
+  @Column({ name: 'label', type: 'varchar', length: 255 , nullable: true})
   label: string;
 
   @ManyToMany(() => CopyrightEntity, copyright => copyright.albums)
@@ -50,7 +50,7 @@ export class AlbumEntity extends EntidadeBase<AlbumEntity> {
   @OneToMany(() => AlbumImageEntity, image => image.album)
   images: AlbumImageEntity[];
 
-  @ManyToMany(() => MarketEntity, market => market.albums, {createForeignKeyConstraints: true})
+  @ManyToMany(() => MarketEntity, market => market.albums)
   markets: MarketEntity[];
 
   @ManyToMany(() => GenresEntity, genres => genres.albums)

@@ -8,7 +8,7 @@ export class GenresEntity extends EntidadeBase<GenresEntity> {
   @PrimaryGeneratedColumn({ name: "id", primaryKeyConstraintName: "pk_genres" })
   id: number;
 
-  @Column({ name: "description", type: "varchar", length: 255 })
+  @Column({ name: "description", type: "varchar", length: 255, nullable: true })
   description: string;
 
 

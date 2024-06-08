@@ -65,4 +65,9 @@ export class AppController {
       throw error;
     }
   }
+
+  @Get('teste')
+  async teste() {
+    return this.appService.teste();
+  }
 }

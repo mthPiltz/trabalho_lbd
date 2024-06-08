@@ -6,69 +6,69 @@ import { MarketEntity } from "./market.entity";
 import { ExternalIdEntity } from "./external-id.entity";
 import { PlaylistEntity } from "./playlist.entity";
 
-@Entity('track')
+@Entity("track")
 export class TrackEntity extends EntidadeBase<TrackEntity> {
 
-  @PrimaryGeneratedColumn({ name: 'track_id', primaryKeyConstraintName: 'pk_track' })
+  @PrimaryGeneratedColumn({ name: "track_id", primaryKeyConstraintName: "pk_track" })
   id: number;
 
-  @Column({ name: 'disc_number', type: 'int' })
+  @Column({ name: "disc_number", type: "int", nullable: true })
   disc_number: number;
 
-  @Column({ name: 'duration_ms', type: 'int' })
+  @Column({ name: "duration_ms", type: "int", nullable: true })
   duration_ms: number;
 
-  @Column({ name: 'explicit', type: 'boolean' })
+  @Column({ name: "explicit", type: "boolean", nullable: true })
   explicit: boolean;
 
-  @Column({ name: 'external_url_spotify', type: 'varchar', length: 255 })
+  @Column({ name: "external_url_spotify", type: "varchar", length: 255, nullable: true })
   external_url_spotify: string;
 
-  @Column({name: 'href', type: 'varchar', length: 255})
+  @Column({ name: "href", type: "varchar", length: 25, nullable: true })
   href: string;
 
-  @Column({ name: 'is_playable', type: 'boolean' })
+  @Column({ name: "is_playable", type: "boolean", nullable: true })
   is_playable: boolean;
 
-  @Column({ name: 'restriction_reason', type: 'varchar', length: 255, nullable: true })
+  @Column({ name: "restriction_reason", type: "varchar", length: 255, nullable: true })
   restriction_reason: string;
 
-  @Column({ name: 'name', type: 'varchar', length: 255 })
+  @Column({ name: "name", type: "varchar", length: 255, nullable: true })
   name: string;
 
-  @Column({ name: 'popularity', type: 'int' })
+  @Column({ name: "popularity", type: "int", nullable: true })
   popularity: number;
 
-  @Column({ name: 'preview_url', type: 'varchar', length: 255 })
+  @Column({ name: "preview_url", type: "varchar", length: 255, nullable: true })
   preview_url: string;
 
-  @Column({ name: 'track_number', type: 'int' })
+  @Column({ name: "track_number", type: "int", nullable: true })
   track_number: number;
 
-  @Column({ name: 'type', type: 'varchar', length: 15 })
+  @Column({ name: "type", type: "varchar", length: 15, nullable: true })
   type: string;
 
-  @Column({ name: 'uri', type: 'varchar', length: 255 })
+  @Column({ name: "uri", type: "varchar", length: 255, nullable: true })
   uri: string;
 
-  @Column({ name: 'is_local', type: 'boolean' })
+  @Column({ name: "is_local", type: "boolean", nullable: true })
   is_local: boolean;
 
-  @ManyToMany(() => MarketEntity, market => market.tracks, {createForeignKeyConstraints: true})
+  @ManyToMany(() => MarketEntity, market => market.tracks, { createForeignKeyConstraints: true })
   markets: MarketEntity[];
 
   @ManyToMany(() => ArtistEntity, artist => artist.tracks)
   artists: ArtistEntity[];
 
   @ManyToOne(() => AlbumEntity, album => album.tracks)
-  @JoinColumn({ name: 'album_id', referencedColumnName: 'id', foreignKeyConstraintName: 'fk_track_album' })
+  @JoinColumn({ name: "album_id", referencedColumnName: "id", foreignKeyConstraintName: "fk_track_album" })
   album: AlbumEntity;
 
   @ManyToOne(() => ExternalIdEntity, external_id => external_id.tracks)
-  @JoinColumn({ name: 'external_id', referencedColumnName: 'id', foreignKeyConstraintName: 'fk_track_external_id' })
+  @JoinColumn({ name: "external_id", referencedColumnName: "id", foreignKeyConstraintName: "fk_track_external_id" })
   external_id: ExternalIdEntity;
 
   @ManyToOne(() => PlaylistEntity, playlist => playlist.tracks)
-  @JoinColumn({ name: 'playlist_id', referencedColumnName: 'id', foreignKeyConstraintName: 'fk_track_playlist' })
+  @JoinColumn({ name: "playlist_id", referencedColumnName: "id", foreignKeyConstraintName: "fk_track_playlist" })
   playlist: PlaylistEntity;
 }
