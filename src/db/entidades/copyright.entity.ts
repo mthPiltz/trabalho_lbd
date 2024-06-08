@@ -1,8 +1,10 @@
-import { Column, Entity, JoinColumn, JoinTable, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
 import { ShowEntity } from "./show.entity";
+import { EntidadeBase } from "../entidade-base";
+import { AudiobookEntity } from "./audiobook.entity";
 
 @Entity('copyright')
-export class CopyrightEntity {
+export class CopyrightEntity extends EntidadeBase<CopyrightEntity> {
   @PrimaryGeneratedColumn({ name: 'id', primaryKeyConstraintName: 'pk_copyright' })
   id: number;
 
@@ -27,4 +29,20 @@ export class CopyrightEntity {
     }
   })
   shows: ShowEntity[];
+
+  @ManyToMany(() => AudiobookEntity, audiobook => audiobook.copyrights)
+  @JoinTable({
+    name: 'audiobook_has_copyright',
+    joinColumn: {
+      name: 'copyright_id',
+      referencedColumnName: 'id',
+      foreignKeyConstraintName: 'fk_audiobook_has_copyright_copyright',
+    },
+    inverseJoinColumn: {
+      name: 'audiobook_id',
+      referencedColumnName: 'id',
+      foreignKeyConstraintName: 'fk_audiobook_has_copyright_audiobook',
+    }
+  })
+  audiobooks: AudiobookEntity[];
 }
