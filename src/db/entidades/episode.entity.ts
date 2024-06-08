@@ -45,7 +45,7 @@ export class EpisodeEntity extends EntidadeBase<EpisodeEntity> {
   @Column({ name: 'name', type: 'varchar', length: 255 })
   name: string;
 
-  @Column({ name: 'release_date', type: 'date' })
+  @Column({ name: 'se_date', type: 'date' })
   release_date: Date;
 
   @Column({ name: 'release_date_precision', type: 'varchar', length: 15 })

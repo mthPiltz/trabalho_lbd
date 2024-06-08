@@ -3,6 +3,8 @@ import { ShowEntity } from "./show.entity";
 import { EntidadeBase } from "../entidade-base";
 import { ChapterEntity } from "./chapter.entity";
 import { AudiobookEntity } from "./audiobook.entity";
+import { AlbumEntity } from "./album.entity";
+import { TrackEntity } from "./track.entity";
 
 @Entity("market")
 export class MarketEntity extends EntidadeBase<MarketEntity> {
@@ -60,4 +62,36 @@ export class MarketEntity extends EntidadeBase<MarketEntity> {
     }
   })
   audiobooks: AudiobookEntity[];
+
+  @ManyToMany(() => AlbumEntity, album => album.markets, {createForeignKeyConstraints: true})
+  @JoinTable({
+    name: "album_has_market",
+    joinColumn: {
+      name: "market_id",
+      referencedColumnName: "id",
+      foreignKeyConstraintName: "fk_album_has_market_market",
+    },
+    inverseJoinColumn: {
+      name: "album_id",
+      referencedColumnName: "id",
+      foreignKeyConstraintName: "fk_album_has_market_album",
+    }
+  })
+  albums: AlbumEntity[];
+
+  @ManyToMany(() => TrackEntity, track => track.markets, {createForeignKeyConstraints: true})
+  @JoinTable({
+    name: "track_has_market",
+    joinColumn: {
+      name: "market_id",
+      referencedColumnName: "id",
+      foreignKeyConstraintName: "fk_track_has_market_market",
+    },
+    inverseJoinColumn: {
+      name: "track_id",
+      referencedColumnName: "id",
+      foreignKeyConstraintName: "fk_track_has_market_track",
+    }
+  })
+  tracks: TrackEntity[];
 }

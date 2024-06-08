@@ -2,6 +2,7 @@ import { Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from "t
 import { ShowEntity } from "./show.entity";
 import { EntidadeBase } from "../entidade-base";
 import { AudiobookEntity } from "./audiobook.entity";
+import { AlbumEntity } from "./album.entity";
 
 @Entity('copyright')
 export class CopyrightEntity extends EntidadeBase<CopyrightEntity> {
@@ -45,4 +46,20 @@ export class CopyrightEntity extends EntidadeBase<CopyrightEntity> {
     }
   })
   audiobooks: AudiobookEntity[];
+
+  @ManyToMany(() => AlbumEntity, album => album.copyrights)
+  @JoinTable({
+    name: 'album_has_copyright',
+    joinColumn: {
+      name: 'copyright_id',
+      referencedColumnName: 'id',
+      foreignKeyConstraintName: 'fk_album_has_copyright_copyright',
+    },
+    inverseJoinColumn: {
+      name: 'album_id',
+      referencedColumnName: 'id',
+      foreignKeyConstraintName: 'fk_album_has_copyright_album',
+    }
+  })
+  albums: AlbumEntity[];
 }
