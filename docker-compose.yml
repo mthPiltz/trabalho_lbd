@@ -1,4 +1,19 @@
 version: '3.7'
-
 services:
-  
+  postgresql:
+    container_name: 'postgresql'
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: 123
+    ports:
+      - "5432:5432"
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "email@email.com"
+      PGADMIN_DEFAULT_PASSWORD: "123"
+    ports:
+      - "8090:80"
+    depends_on:
+      - postgresql
