@@ -4,9 +4,24 @@ import { AppService } from './app.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { HttpModule } from '@nestjs/axios';
 import { DbModule } from "./db/db.module";
+import { TypeOrmModule } from "@nestjs/typeorm";
+import { ArtistEntity } from './db/entidades/artist.entity';
+import { GenresEntity } from './db/entidades/genres.entity';
+import { ArtistImageEntity } from './db/imagens/artist-image.entity';
+import { TrackEntity } from './db/entidades/track.entity';
+
 
 @Module({
-  imports: [ConfigModule.forRoot(), DbModule, HttpModule],
+  imports: [
+    ConfigModule.forRoot(), 
+    DbModule, 
+    HttpModule,
+    TypeOrmModule.forFeature([
+      ArtistEntity,
+      GenresEntity,
+      ArtistImageEntity,
+      TrackEntity,
+    ])],
   controllers: [AppController],
   providers: [AppService, ConfigService],
 })

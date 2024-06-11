@@ -38,31 +38,16 @@ export class AppController {
 
   @Get('callback')
   async getTeste(@Req() req: Request) {
-    const client_id = this.envConfig.get('client_id'),
-          secret_id = this.envConfig.get('secret_id'),
-          code = req.query.code as string;
-    const url = 'https://accounts.spotify.com/api/token';
-    
-    const body = new URLSearchParams({
-      grant_type: 'authorization_code',
-      code: code,
-      redirect_uri: 'http://localhost:3030/callback',
-    });
+    return this.appService.getAccessToken(req.query.code as string);
+  }
 
-    const headers = {
-      'content-type': 'application/x-www-form-urlencoded',
-      Authorization: 'Basic ' + Buffer.from(client_id + ':' + secret_id, 'binary').toString('base64')
-    };
-    
-    try {
-      const response = await firstValueFrom(
-        this.httpService.post(url, body.toString(), { headers })
-      );
-            
-      return this.appService.getTopArtists(response.data.access_token);
-    } catch (error) {
-      console.error('Error Response:', error.response ? error.response.data : error.message);
-      throw error;
-    }
+  @Get('artists')
+  async getArtists(){
+    return this.appService.getTopArtists();
+  }
+
+  @Get('tracks')
+  async getTracks(){
+    return this.appService.getTopTracks();
   }
 }
