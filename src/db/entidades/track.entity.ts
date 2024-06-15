@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToMany, ManyToOne, PrimaryColumn } from "typeorm";
 import { EntidadeBase } from "../entidade-base";
 import { ArtistEntity } from "./artist.entity";
 import { AlbumEntity } from "./album.entity";
@@ -9,8 +9,8 @@ import { PlaylistEntity } from "./playlist.entity";
 @Entity('track')
 export class TrackEntity extends EntidadeBase<TrackEntity> {
 
-  @PrimaryGeneratedColumn({ name: 'track_id', primaryKeyConstraintName: 'pk_track' })
-  id: number;
+  @PrimaryColumn({ name: 'track_id', type: 'varchar', primaryKeyConstraintName: 'pk_track' })
+  id: string;
 
   @Column({ name: 'disc_number', type: 'int' })
   disc_number: number;

@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryColumn } from "typeorm";
 import { EntidadeBase } from "../entidade-base";
 import { TrackEntity } from "./track.entity";
 import { PlaylistImageEntity } from "../imagens/playlist-image.entity";
@@ -7,8 +7,8 @@ import { UserEntity } from "./user.entity";
 @Entity('playlist')
 export class PlaylistEntity extends EntidadeBase<PlaylistEntity> {
 
-  @PrimaryGeneratedColumn({ name: 'playlist_id', primaryKeyConstraintName: 'pk_playlist' })
-  id: number;
+  @PrimaryColumn({ name: 'playlist_id', type : 'varchar', primaryKeyConstraintName: 'pk_playlist' })
+  id: string;
 
   @Column({ name: 'external_url_spotify', type: 'varchar', length: 255 })
   external_url_spotify: string;

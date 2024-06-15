@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToMany, ManyToOne, OneToMany, PrimaryColumn } from "typeorm";
 import { EntidadeBase } from "../entidade-base";
 import { ChapterImageEntity } from "../imagens/chapter-image.entity";
 import { MarketEntity } from "./market.entity";
@@ -6,8 +6,8 @@ import { AudiobookEntity } from "./audiobook.entity";
 
 @Entity('chapter')
 export class ChapterEntity extends EntidadeBase<ChapterEntity> {
-  @PrimaryGeneratedColumn({ name: 'id', primaryKeyConstraintName: 'pk_chapter' })
-  id: number;
+  @PrimaryColumn({ name: 'id', type: 'varchar', primaryKeyConstraintName: 'pk_chapter' })
+  id: string;
 
   @Column({ name: 'audio_preview_url', type: 'varchar', length: 255 })
   audio_preview_url: string;

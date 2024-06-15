@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToMany, ManyToOne, OneToMany, PrimaryColumn } from "typeorm";
 import { EntidadeBase } from "../entidade-base";
 import { CopyrightEntity } from "./copyright.entity";
 import { AlbumImageEntity } from "../imagens/album-image.entity";
@@ -11,8 +11,8 @@ import { ExternalIdEntity } from "./external-id.entity";
 @Entity('album')
 export class AlbumEntity extends EntidadeBase<AlbumEntity> {
 
-  @PrimaryGeneratedColumn({ name: 'id', primaryKeyConstraintName: 'pk_album' })
-  id: number;
+  @PrimaryColumn({ name: 'id', type: 'varchar', primaryKeyConstraintName: 'pk_album' })
+  id: string;
 
   @Column({ name: 'album_type', type: 'varchar', length: 50 })
   album_type: string;

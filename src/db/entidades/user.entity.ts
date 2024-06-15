@@ -1,4 +1,4 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, OneToMany, PrimaryColumn } from "typeorm";
 import { EntidadeBase } from "../entidade-base";
 import { PlaylistEntity } from "./playlist.entity";
 import { UserImageEntity } from "../imagens/user-image.entity";
@@ -6,8 +6,8 @@ import { UserImageEntity } from "../imagens/user-image.entity";
 @Entity('user')
 export class UserEntity extends EntidadeBase<UserEntity> {
 
-  @PrimaryGeneratedColumn({ name: 'user_id', primaryKeyConstraintName: 'pk_user' })
-  id: number;
+  @PrimaryColumn({ name: 'user_id', type: 'varchar', primaryKeyConstraintName: 'pk_user' })
+  id: string;
 
   @Column({ name: 'external_url_spotify', type: 'varchar', length: 255 })
   external_url_spotify: string;

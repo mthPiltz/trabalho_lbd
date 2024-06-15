@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, JoinTable, ManyToMany, OneToMany, PrimaryColumn } from "typeorm";
 import { EntidadeBase } from "../entidade-base";
 import { ShowImageEntity } from "../imagens/show-image.entity";
 import { EpisodeEntity } from "./episode.entity";
@@ -8,8 +8,8 @@ import { MarketEntity } from "./market.entity";
 @Entity({ name: 'show' })
 export class ShowEntity extends EntidadeBase<ShowEntity> {
 
-  @PrimaryGeneratedColumn({ name: 'id', primaryKeyConstraintName: 'pk_show' })
-  id: number;
+  @PrimaryColumn({ name: 'id', type : 'varchar', primaryKeyConstraintName: 'pk_show' })
+  id: string;
 
   @Column({ name: 'external_url_spotify', type: 'varchar', length: 255 })
   external_url_spotify: string;

@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToMany, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToMany, OneToMany, PrimaryColumn } from "typeorm";
 import { EntidadeBase } from "../entidade-base";
 import { ChapterEntity } from "./chapter.entity";
 import { CopyrightEntity } from "./copyright.entity";
@@ -7,8 +7,8 @@ import { MarketEntity } from "./market.entity";
 
 @Entity('audiobook')
 export class AudiobookEntity extends EntidadeBase<AudiobookEntity> {
-  @PrimaryGeneratedColumn({ name: 'id', primaryKeyConstraintName: 'pk_audiobook' })
-  id: number;
+  @PrimaryColumn({ name: 'id', type : 'varchar', primaryKeyConstraintName: 'pk_audiobook' })
+  id: string;
 
   @Column({ name: 'authors', array: true, type: 'varchar', length: 15})
   authors: string[];
