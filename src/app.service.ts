@@ -18,7 +18,9 @@ export class AppService {
     @InjectRepository(ArtistEntity)
     private readonly artistRepository : Repository<ArtistEntity>,
     @InjectRepository(TrackEntity)
-    private readonly trackRepository : Repository<TrackEntity>
+    private readonly trackRepository : Repository<TrackEntity>,
+    @InjectRepository(MarketEntity)
+    private readonly marketEntity : Repository<MarketEntity>
   ) {
   }
 
@@ -131,6 +133,24 @@ export class AppService {
       });
 
       console.log(track);
+    });
+
+    return response.data;
+  }
+
+  async getMarkets(){
+    const url = 'https://api.spotify.com/v1/markets'
+    const headers = {
+      'Authorization': 'Bearer ' + this.envConfig.get('access_token')
+    }
+    const response = await firstValueFrom(this.httpService.get(url, { headers }));
+    
+    response.data.markets.forEach(e => {
+      const market = new MarketEntity({
+        type : e
+      });
+
+      this.marketEntity.save(market);
     });
 
     return response.data;

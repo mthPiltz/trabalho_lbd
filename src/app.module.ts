@@ -9,6 +9,7 @@ import { ArtistEntity } from './db/entidades/artist.entity';
 import { GenresEntity } from './db/entidades/genres.entity';
 import { ArtistImageEntity } from './db/imagens/artist-image.entity';
 import { TrackEntity } from './db/entidades/track.entity';
+import { MarketEntity } from './db/entidades/market.entity';
 
 
 @Module({
@@ -21,6 +22,7 @@ import { TrackEntity } from './db/entidades/track.entity';
       GenresEntity,
       ArtistImageEntity,
       TrackEntity,
+      MarketEntity
     ])],
   controllers: [AppController],
   providers: [AppService, ConfigService],

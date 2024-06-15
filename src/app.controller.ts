@@ -50,4 +50,9 @@ export class AppController {
   async getTracks(){
     return this.appService.getTopTracks();
   }
+
+  @Get('markets')
+  async getMarkets(){
+    return this.appService.getMarkets();
+  }
 }
