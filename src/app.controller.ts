@@ -43,12 +43,12 @@ export class AppController {
 
   @Get('artists')
   async getArtists(){
-    return this.appService.getTopArtists();
+    return this.appService.getTopArtists(10, 0);
   }
 
   @Get('tracks')
   async getTracks(){
-    return this.appService.getTopTracks();
+    return this.appService.getTopTracks(10, 0);
   }
 
   @Get('markets')

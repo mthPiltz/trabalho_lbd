@@ -52,8 +52,9 @@ export class AppService {
     }
   }
 
-  private async getUserTopItems(item : string){
-    const url = `https://api.spotify.com/v1/me/top/${item}?limit=10&offset=0`
+  private async getUserTopItems(item : string, limit : number, offset : number){
+    const url = `https://api.spotify.com/v1/me/top/${item}?time_range=long_term&limit=${limit}&offset=${offset}`
+    console.log(url);
     const headers = {
       'Authorization': 'Bearer ' + this.envConfig.get('access_token')
     }
@@ -62,8 +63,8 @@ export class AppService {
       this.httpService.get(url, { headers }));
   }
 
-  public async getTopArtists() {
-    const response : any = await this.getUserTopItems('artists');
+  public async getTopArtists(limit : number, offset : number) {
+    const response : any = await this.getUserTopItems('artists', limit, offset);
   
     response.data.items.forEach(async e => {
       const images = e.images.map(e => {
@@ -77,7 +78,7 @@ export class AppService {
       const artist = new ArtistEntity({
         id : e.id,
         external_url_spotify : e.external_urls,
-        href_followares : e.followers.href,
+        href_followares : e.followers.href ?? "",
         total_followares : e.followers.total,
         href : e.href,
         name : e.name,
@@ -86,22 +87,29 @@ export class AppService {
         uri : e.uri,
         images : images
       });
-      console.log(artist);
-      // await this.artistRepository.save(artist);
+      
+      await this.artistRepository.save(artist);
     });
-    
+
+    if(response.data.items.length == 10)
+      await this.getTopArtists(limit, offset + 10)
+
     return response.data
   }
 
-  public async getTopTracks(){
-    const response : any = await this.getUserTopItems('tracks');
+  public async getTopTracks(limit : number, offset : number){
+    const response : any = await this.getUserTopItems('tracks', limit, offset);
 
     response.data.items.forEach(async e => {
-      const markets = e.album.available_markets.map(e => {
-        return new MarketEntity({
-          type : e
+      
+      const markets = e.album.available_markets.map(async e => {
+        return await this.marketEntity.find({
+          where: {
+            type : e
+          }
         });
       });
+      
 
       const artist = e.album.artists.map(e => {
         return new ArtistEntity({
@@ -132,7 +140,7 @@ export class AppService {
         artists : artist
       });
 
-      console.log(track);
+      await this.trackRepository.save(track);
     });
 
     return response.data;

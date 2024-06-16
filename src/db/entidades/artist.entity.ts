@@ -34,7 +34,7 @@ export class ArtistEntity extends EntidadeBase<ArtistEntity> {
   @Column({ name: 'uri', type: 'varchar', length: 255 })
   uri: string;
 
-  @OneToMany(() => ArtistImageEntity, image => image.artist)
+  @OneToMany(() => ArtistImageEntity, image => image.artist, { cascade: true })
   images: ArtistImageEntity[];
 
   @ManyToMany(() => GenresEntity, genres => genres.artists)
