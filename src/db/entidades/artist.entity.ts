@@ -4,6 +4,7 @@ import { AlbumEntity } from "./album.entity";
 import { ArtistImageEntity } from "../imagens/artist-image.entity";
 import { GenresEntity } from "./genres.entity";
 import { TrackEntity } from "./track.entity";
+import { exitCode } from "process";
 
 @Entity("artist")
 export class ArtistEntity extends EntidadeBase<ArtistEntity> {
@@ -56,7 +57,7 @@ export class ArtistEntity extends EntidadeBase<ArtistEntity> {
   })
   albums: AlbumEntity[];
 
-  @ManyToMany(() => TrackEntity, track => track.artists)
+  @ManyToMany(() => TrackEntity, track => track.artists, { cascade: true })
   @JoinTable({
     name: "artist_track",
     joinColumn: {
