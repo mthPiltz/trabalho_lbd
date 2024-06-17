@@ -12,7 +12,7 @@ import { TypeOrmModule } from "@nestjs/typeorm";
       database: "postgres",
       entities: ['dist/db/**/*.entity{.ts,.js}'],
       synchronize: true,
-      logging: ["error"]
+      logging: ["error", "info", "log"]
     })
   ],
   controllers: [],

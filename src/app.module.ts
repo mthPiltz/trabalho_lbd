@@ -11,6 +11,8 @@ import { ArtistImageEntity } from './db/imagens/artist-image.entity';
 import { TrackEntity } from './db/entidades/track.entity';
 import { MarketEntity } from './db/entidades/market.entity';
 import { AlbumEntity } from './db/entidades/album.entity';
+import { CategoryEntity } from './db/entidades/category.entity';
+import { CategoryImageEntity } from './db/imagens/category-image.entity';
 
 
 @Module({
@@ -24,7 +26,9 @@ import { AlbumEntity } from './db/entidades/album.entity';
       ArtistImageEntity,
       TrackEntity,
       MarketEntity,
-      AlbumEntity
+      AlbumEntity,
+      CategoryEntity,
+      CategoryImageEntity
     ])],
   controllers: [AppController],
   providers: [AppService, ConfigService],

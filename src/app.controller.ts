@@ -41,10 +41,6 @@ export class AppController {
     return this.appService.getAccessToken(req.query.code as string);
   }
 
-  @Get('artists')
-  async getArtists(){
-    return this.appService.getTopArtists(10, 0);
-  }
 
   @Get('markets')
   async getMarkets(){

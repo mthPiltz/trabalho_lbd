@@ -1,11 +1,11 @@
-import { Column, Entity, JoinColumn, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, OneToMany, PrimaryColumn } from "typeorm";
 import { CategoryImageEntity } from "../imagens/category-image.entity";
 import { EntidadeBase } from "../entidade-base";
 
 @Entity('category')
 export class CategoryEntity extends EntidadeBase<CategoryEntity>{
-  @PrimaryGeneratedColumn({name: 'id', primaryKeyConstraintName: 'pk_category'})
-  id: number;
+  @PrimaryColumn({name: 'id', type : 'varchar', primaryKeyConstraintName: 'pk_category'})
+  id: string;
 
   @Column({name: 'href', type: 'varchar', length: 255})
   href: string;

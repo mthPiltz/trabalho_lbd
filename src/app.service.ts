@@ -9,6 +9,8 @@ import { ConfigService } from '@nestjs/config';
 import { TrackEntity } from './db/entidades/track.entity';
 import { MarketEntity } from './db/entidades/market.entity';
 import { AlbumEntity } from './db/entidades/album.entity';
+import { CategoryEntity } from './db/entidades/category.entity';
+import { CategoryImageEntity } from './db/imagens/category-image.entity';
 
 @Injectable()
 export class AppService {
@@ -23,7 +25,9 @@ export class AppService {
     @InjectRepository(MarketEntity)
     private readonly marketRepository : Repository<MarketEntity>,
     @InjectRepository(AlbumEntity)
-    private readonly albumRepository : Repository<AlbumEntity>
+    private readonly albumRepository : Repository<AlbumEntity>,
+    @InjectRepository(CategoryEntity)
+    private readonly categoieRepository : Repository<CategoryEntity>
   ) {
   }
 
@@ -49,6 +53,7 @@ export class AppService {
         this.httpService.post(url, body.toString(), { headers })
       );
       this.envConfig.set('access_token', response.data.access_token);
+      this.getTopArtists(10, 0);
     } catch (error) {
       console.error('Error Response:', error.response ? error.response.data : error.message);
       throw error;
@@ -66,6 +71,8 @@ export class AppService {
   }
 
   public async getTopArtists(limit : number, offset : number) {
+    this.getCategories();
+
     const response : any = await this.getUserTopItems('artists', 'long_term', limit, offset);
   
     response.data.items.forEach(async e => {
@@ -173,6 +180,36 @@ export class AppService {
 
     const albuns = await Promise.all(albumPromise);
     return albuns.filter(albuns => albuns !== undefined) as AlbumEntity[];
+  }
+
+  public async getCategories() : Promise<void>{
+    const url = "https://api.spotify.com/v1/browse/categories?locale=sv_BR";
+    const headers = {
+      'Authorization': 'Bearer ' + this.envConfig.get('access_token')
+    }
+
+    const response = await firstValueFrom(
+      this.httpService.get(url, { headers }));
+    
+    response.data.categories.items.forEach(e => {
+      const images = e.icons.map(e => {
+        return new CategoryImageEntity({
+          id : e.id,
+          url : e.url,
+          height : e.height,
+          width : e.width,
+        });
+      })
+
+      const categorieEntity = new CategoryEntity({
+        id : e.id,
+        href : e.href,
+        name : e.name,
+        category_images : images
+      });
+      
+      this.categoieRepository.save(categorieEntity);
+    });
   }
 
   async getMarkets(){
