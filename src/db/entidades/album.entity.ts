@@ -29,8 +29,8 @@ export class AlbumEntity extends EntidadeBase<AlbumEntity> {
   @Column({ name: 'name', type: 'varchar', length: 255 })
   name: string;
 
-  @Column({ name: 'release_date', type: 'date' })
-  release_date: Date;
+  @Column({ name: 'release_date', type: 'varchar' })
+  release_date: string;
 
   @Column({ name: 'release_date_precision', type: 'varchar', length: 15 })
   release_date_precision: string;

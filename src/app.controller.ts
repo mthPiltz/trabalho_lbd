@@ -46,11 +46,6 @@ export class AppController {
     return this.appService.getTopArtists(10, 0);
   }
 
-  @Get('tracks')
-  async getTracks(){
-    return this.appService.getTopTracks(10, 0);
-  }
-
   @Get('markets')
   async getMarkets(){
     return this.appService.getMarkets();

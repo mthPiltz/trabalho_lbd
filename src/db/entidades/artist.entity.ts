@@ -41,7 +41,7 @@ export class ArtistEntity extends EntidadeBase<ArtistEntity> {
   @ManyToMany(() => GenresEntity, genres => genres.artists)
   genres: GenresEntity[];
 
-  @ManyToMany(() => AlbumEntity, album => album.artists)
+  @ManyToMany(() => AlbumEntity, album => album.artists, { cascade: true })
   @JoinTable({
     name: "artist_album",
     joinColumn: {

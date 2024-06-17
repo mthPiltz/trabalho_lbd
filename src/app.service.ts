@@ -8,6 +8,7 @@ import { ArtistImageEntity } from './db/imagens/artist-image.entity';
 import { ConfigService } from '@nestjs/config';
 import { TrackEntity } from './db/entidades/track.entity';
 import { MarketEntity } from './db/entidades/market.entity';
+import { AlbumEntity } from './db/entidades/album.entity';
 
 @Injectable()
 export class AppService {
@@ -20,7 +21,9 @@ export class AppService {
     @InjectRepository(TrackEntity)
     private readonly trackRepository : Repository<TrackEntity>,
     @InjectRepository(MarketEntity)
-    private readonly marketEntity : Repository<MarketEntity>
+    private readonly marketRepository : Repository<MarketEntity>,
+    @InjectRepository(AlbumEntity)
+    private readonly albumRepository : Repository<AlbumEntity>
   ) {
   }
 
@@ -67,6 +70,7 @@ export class AppService {
   
     response.data.items.forEach(async e => {
       const tracks = await this.topTracksArtist(e.id);
+      const albuns = await this.topAlbunsArtist(e.id);
       const images = e.images.map(e => {
         return new ArtistImageEntity({
           url : e.url,
@@ -77,7 +81,7 @@ export class AppService {
 
       const artist = new ArtistEntity({
         id : e.id,
-        external_url_spotify : e.external_urls,
+        external_url_spotify : e.external_urls.spotify,
         href_followares : e.followers.href ?? "",
         total_followares : e.followers.total,
         href : e.href,
@@ -87,10 +91,15 @@ export class AppService {
         uri : e.uri,
         images : images,
         tracks : tracks,
+        albums : albuns
       });
       
-      
-      await this.artistRepository.save(artist);
+      try {
+        await this.artistRepository.save(artist);
+      } catch (error) {
+        console.log(error);
+      }
+
     });
 
     if(response.data.items.length == 10)
@@ -108,62 +117,62 @@ export class AppService {
     const response = await firstValueFrom(
       this.httpService.get(url, { headers }));
 
-      const trackPromises = response.data.tracks.map(async e => {
-      const exist = await this.trackRepository.findOne({where : {id : e.id}});
-      if(!exist)
-        return new TrackEntity({
-          id : e.id,
-          disc_number: e.disc_number,
-          duration_ms: e.duration_ms,
-          explicit: e.explicit,
-          external_url_spotify: e.external_urls.spotify,
-          href: e.href,
-          is_playable: e.is_playable,
-          restriction_reason: e.restrictions ? e.restrictions.reason : "",
-          name: e.name,
-          popularity: e.popularity,
-          preview_url: e.preview_url,
-          track_number: e.track_number,
-          type: e.type,
-          uri: e.uri,
-          is_local: e.is_local,
-        });
+    const trackPromises = response.data.tracks.map(async e => {
+    const exist = await this.trackRepository.findOne({where : {id : e.id}});
+    if(!exist)
+      return new TrackEntity({
+        id : e.id,
+        disc_number: e.disc_number,
+        duration_ms: e.duration_ms,
+        explicit: e.explicit,
+        external_url_spotify: e.external_urls.spotify,
+        href: e.href,
+        is_playable: e.is_playable,
+        restriction_reason: e.restrictions ? e.restrictions.reason : "",
+        name: e.name,
+        popularity: e.popularity,
+        preview_url: e.preview_url,
+        track_number: e.track_number,
+        type: e.type,
+        uri: e.uri,
+        is_local: e.is_local,
+      });
     });
 
     const tracks = await Promise.all(trackPromises);
     return tracks.filter(track => track !== undefined) as TrackEntity[];
   }
 
-  public async getTopTracks(limit : number, offset : number){
-    const response : any = await this.getUserTopItems('tracks', 'short_term',limit, offset);
+  public async topAlbunsArtist(artist_id : string) : Promise<AlbumEntity[]> {
+    const url = `https://api.spotify.com/v1/artists/${artist_id}/albums?include_groups=album`
+    const headers = {
+      'Authorization': 'Bearer ' + this.envConfig.get('access_token')
+    }
 
-    response.data.items.forEach(async e => {
-      
+    const response = await firstValueFrom(
+      this.httpService.get(url, { headers }));
 
-      const track = new TrackEntity({
-        id : e.id,
-        disc_number : e.disc_number,
-        duration_ms : e.duration_ms,
-        explicit  : e.explicit,
-        external_url_spotify : e.external_urls.spotify,
-        href : e.href,
-        is_playable : true, // não retorna da API
-        restriction_reason : "",
-        name : e.name,
-        popularity : e.popularity,
-        preview_url : e.preview_url,
-        track_number : e.track_number,
-        type : e.type,  
-        uri : e.uri,
-        is_local : e.is_local,
-        // markets : markets,
-        // artists : artist
-      });
-
-      // await this.trackRepository.save(track);
+    const albumPromise = response.data.items.map(async e => {
+      const exist = await this.albumRepository.findOne({where : {id : e.id}});
+      if(!exist){
+        return new AlbumEntity({
+          id : e.id,
+          album_type : e.album_type,
+          total_tracks : e.total_tracks,
+          external_url_spotify : e.external_urls.spotify,
+          href : e.href,
+          name : e.name,
+          release_date : e.release_date,
+          release_date_precision : e.release_date_precision,
+          type : e.type,
+          uri : e.uri,
+          label : ''
+        });
+      }
     });
 
-    return response.data;
+    const albuns = await Promise.all(albumPromise);
+    return albuns.filter(albuns => albuns !== undefined) as AlbumEntity[];
   }
 
   async getMarkets(){
@@ -178,7 +187,7 @@ export class AppService {
         type : e
       });
 
-      this.marketEntity.save(market);
+      this.marketRepository.save(market);
     });
 
     return response.data;

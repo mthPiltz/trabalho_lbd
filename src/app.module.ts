@@ -10,6 +10,7 @@ import { GenresEntity } from './db/entidades/genres.entity';
 import { ArtistImageEntity } from './db/imagens/artist-image.entity';
 import { TrackEntity } from './db/entidades/track.entity';
 import { MarketEntity } from './db/entidades/market.entity';
+import { AlbumEntity } from './db/entidades/album.entity';
 
 
 @Module({
@@ -22,7 +23,8 @@ import { MarketEntity } from './db/entidades/market.entity';
       GenresEntity,
       ArtistImageEntity,
       TrackEntity,
-      MarketEntity
+      MarketEntity,
+      AlbumEntity
     ])],
   controllers: [AppController],
   providers: [AppService, ConfigService],
