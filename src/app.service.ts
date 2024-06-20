@@ -1,17 +1,17 @@
-import { Injectable } from '@nestjs/common';
-import { HttpService } from '@nestjs/axios';
-import { firstValueFrom } from 'rxjs';
-import { InjectRepository } from '@nestjs/typeorm';
-import { ArtistEntity } from './db/entidades/artist.entity';
-import { Repository } from 'typeorm';
-import { ArtistImageEntity } from './db/imagens/artist-image.entity';
-import { ConfigService } from '@nestjs/config';
-import { TrackEntity } from './db/entidades/track.entity';
-import { MarketEntity } from './db/entidades/market.entity';
-import { AlbumEntity } from './db/entidades/album.entity';
-import { CategoryEntity } from './db/entidades/category.entity';
-import { CategoryImageEntity } from './db/imagens/category-image.entity';
-import { strict } from 'assert';
+import { Injectable } from "@nestjs/common";
+import { HttpService } from "@nestjs/axios";
+import { firstValueFrom } from "rxjs";
+import { InjectRepository } from "@nestjs/typeorm";
+import { ArtistEntity } from "./db/entidades/artist.entity";
+import { Repository } from "typeorm";
+import { ArtistImageEntity } from "./db/imagens/artist-image.entity";
+import { ConfigService } from "@nestjs/config";
+import { TrackEntity } from "./db/entidades/track.entity";
+import { MarketEntity } from "./db/entidades/market.entity";
+import { AlbumEntity } from "./db/entidades/album.entity";
+import { CategoryEntity } from "./db/entidades/category.entity";
+import { CategoryImageEntity } from "./db/imagens/category-image.entity";
+import { GenresEntity } from "./db/entidades/genres.entity";
 
 @Injectable()
 export class AppService {
@@ -28,45 +28,46 @@ export class AppService {
     @InjectRepository(AlbumEntity)
     private readonly albumRepository: Repository<AlbumEntity>,
     @InjectRepository(CategoryEntity)
-    private readonly categoieRepository: Repository<CategoryEntity>
+    private readonly categoieRepository: Repository<CategoryEntity>,
+    @InjectRepository(GenresEntity)
+    private readonly genreRepository: Repository<GenresEntity>,
   ) {
   }
 
   async getAccessToken(_code: string) {
-    const client_id = this.envConfig.get('client_id'),
-      secret_id = this.envConfig.get('secret_id'),
+    const client_id = this.envConfig.get("client_id"),
+      secret_id = this.envConfig.get("secret_id"),
       code = _code;
-    const url = 'https://accounts.spotify.com/api/token';
+    const url = "https://accounts.spotify.com/api/token";
 
     const body = new URLSearchParams({
-      grant_type: 'authorization_code',
+      grant_type: "authorization_code",
       code: code,
-      redirect_uri: 'http://localhost:3030/callback',
+      redirect_uri: "http://localhost:3030/callback",
     });
 
     const headers = {
-      'content-type': 'application/x-www-form-urlencoded',
-      Authorization: 'Basic ' + Buffer.from(client_id + ':' + secret_id, 'binary').toString('base64')
+      "content-type": "application/x-www-form-urlencoded",
+      Authorization: "Basic " + Buffer.from(client_id + ":" + secret_id, "binary").toString("base64"),
     };
 
     try {
       const response = await firstValueFrom(
-        this.httpService.post(url, body.toString(), { headers })
+        this.httpService.post(url, body.toString(), { headers }),
       );
-      this.envConfig.set('access_token', response.data.access_token);
-      //this.getTopArtists(10, 0);
-      this.getPlaylists()
+      this.envConfig.set("access_token", response.data.access_token);
+      this.getTopArtists(10, 0);
     } catch (error) {
-      console.error('Error Response:', error.response ? error.response.data : error.message);
+      console.error("Error Response:", error.response ? error.response.data : error.message);
       throw error;
     }
   }
 
   private async getUserTopItems(item: string, range: string, limit: number, offset: number) {
-    const url = `https://api.spotify.com/v1/me/top/${item}?time_range=${range}&limit=${limit}&offset=${offset}`
+    const url = `https://api.spotify.com/v1/me/top/${ item }?time_range=${ range }&limit=${ limit }&offset=${ offset }`;
     const headers = {
-      'Authorization': 'Bearer ' + this.envConfig.get('access_token')
-    }
+      "Authorization": "Bearer " + this.envConfig.get("access_token"),
+    };
 
     return await firstValueFrom(
       this.httpService.get(url, { headers }));
@@ -75,7 +76,7 @@ export class AppService {
   public async getTopArtists(limit: number, offset: number) {
     this.getCategories();
 
-    const response: any = await this.getUserTopItems('artists', 'long_term', limit, offset);
+    const response: any = await this.getUserTopItems("artists", "long_term", limit, offset);
 
     response.data.items.forEach(async e => {
       const tracks = await this.topTracksArtist(e.id);
@@ -84,7 +85,7 @@ export class AppService {
         return new ArtistImageEntity({
           url: e.url,
           width: e.width,
-          height: e.height
+          height: e.height,
         });
       });
 
@@ -100,7 +101,7 @@ export class AppService {
         uri: e.uri,
         images: images,
         tracks: tracks,
-        albums: albuns
+        albums: albuns,
       });
 
       try {
@@ -112,16 +113,16 @@ export class AppService {
     });
 
     if (response.data.items.length == 10)
-      await this.getTopArtists(limit, offset + 10)
+      await this.getTopArtists(limit, offset + 10);
 
-    return response.data
+    return response.data;
   }
 
   public async topTracksArtist(artist_id: string): Promise<TrackEntity[]> {
-    const url = `https://api.spotify.com/v1/artists/${artist_id}/top-tracks`
+    const url = `https://api.spotify.com/v1/artists/${ artist_id }/top-tracks`;
     const headers = {
-      'Authorization': 'Bearer ' + this.envConfig.get('access_token')
-    }
+      "Authorization": "Bearer " + this.envConfig.get("access_token"),
+    };
 
     const response = await firstValueFrom(
       this.httpService.get(url, { headers }));
@@ -153,10 +154,10 @@ export class AppService {
   }
 
   public async topAlbunsArtist(artist_id: string): Promise<AlbumEntity[]> {
-    const url = `https://api.spotify.com/v1/artists/${artist_id}/albums?include_groups=album`
+    const url = `https://api.spotify.com/v1/artists/${ artist_id }/albums?include_groups=album`;
     const headers = {
-      'Authorization': 'Bearer ' + this.envConfig.get('access_token')
-    }
+      "Authorization": "Bearer " + this.envConfig.get("access_token"),
+    };
 
     const response = await firstValueFrom(
       this.httpService.get(url, { headers }));
@@ -175,7 +176,7 @@ export class AppService {
           release_date_precision: e.release_date_precision,
           type: e.type,
           uri: e.uri,
-          label: ''
+          label: "",
         });
       }
     });
@@ -187,8 +188,8 @@ export class AppService {
   public async getCategories(): Promise<void> {
     const url = "https://api.spotify.com/v1/browse/categories?locale=sv_BR";
     const headers = {
-      'Authorization': 'Bearer ' + this.envConfig.get('access_token')
-    }
+      "Authorization": "Bearer " + this.envConfig.get("access_token"),
+    };
 
     const response = await firstValueFrom(
       this.httpService.get(url, { headers }));
@@ -201,13 +202,13 @@ export class AppService {
           height: e.height,
           width: e.width,
         });
-      })
+      });
 
       const categorieEntity = new CategoryEntity({
         id: e.id,
         href: e.href,
         name: e.name,
-        category_images: images
+        category_images: images,
       });
 
       this.categoieRepository.save(categorieEntity);
@@ -303,20 +304,35 @@ export class AppService {
   }
 
   async getMarkets() {
-    const url = 'https://api.spotify.com/v1/markets'
+    const url = 'https://api.spotify.com/v1/markets';
     const headers = {
-      'Authorization': 'Bearer ' + this.envConfig.get('access_token')
-    }
+      "Authorization": "Bearer " + this.envConfig.get("access_token"),
+    };
     const response = await firstValueFrom(this.httpService.get(url, { headers }));
 
     response.data.markets.forEach(e => {
       const market = new MarketEntity({
-        type: e
+        type: e,
       });
 
       this.marketRepository.save(market);
     });
 
     return response.data;
+  }
+
+  async getGenres() {
+    const url = "https://api.spotify.com/v1/recommendations/available-genre-seeds";
+    const headers = {
+      "Authorization": "Bearer " + this.envConfig.get("access_token")
+    };
+    const response = await fetch(url, { headers, method: "GET" });
+    const genresDto= (await response.json()).genres;
+
+    for (const genre of genresDto) {
+      const genreEntity = new GenresEntity({description: genre});
+
+      await this.genreRepository.save(genreEntity)
+    }
   }
 }
