@@ -21,7 +21,7 @@ export class AppController {
     <html lang="pt-br">
       <body>
         <div>
-          <a href='https://accounts.spotify.com/authorize?response_type=code&client_id=${ client_id }&scope=user-read-private user-read-email user-top-read&redirect_uri=http://localhost:3030/callback'>Logar</a>
+          <a href='https://accounts.spotify.com/authorize?response_type=code&client_id=${ client_id }&scope=user-read-private user-read-email user-top-read playlist-read-private&redirect_uri=http://localhost:3030/callback'>Logar</a>
         </div>
       </body>
       <script>
@@ -39,6 +39,11 @@ export class AppController {
   @Get('callback')
   async getTeste(@Req() req: Request) {
     return this.appService.getAccessToken(req.query.code as string);
+  }
+
+  @Get('playlist')
+  async getPlaylist(){
+    return this.appService.getPlaylists();
   }
 
 
